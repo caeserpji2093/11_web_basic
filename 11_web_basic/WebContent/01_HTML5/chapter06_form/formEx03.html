@@ -144,6 +144,14 @@
 		- 사용자가 초기 공간보다 더 많은 텍스트를 입력하면 자동으로 스크롤바가 생성된다.
 	
 	 -->
+	<h3>textarea tag</h3>
+	<form>
+		<textarea rows="10" cols="30" name="textarea1"></textarea>
+		<textarea rows="10" cols="30" name="textarea2">초깃값은 이곳에 작성합니다. </textarea>
+		<textarea rows="10" cols="30" name="textarea3" placeholder="100자 이내로 작성하세요." maxlength="100"></textarea>
+		<p><input type="submit"></p>
+	</form>
+	<br><hr><br>
 
    	
 	<!-- 
@@ -157,7 +165,15 @@
 		- form의 메서드 전송방식이 반드시 post이어야 하며  enctype="multipart/form-data" 속성을 반드시 지정해야 한다.
 		   
 	 -->
-
+	 
+	<h3>file type</h3>
+	<form method="post" enctype="multipart/form-data">
+		<p>파일 업로드1 : <input type="file" name="file1"> </p>
+		<p>파일 업로드2 : <input type="file" name="file2"> </p>
+		<p><input type="submit"></p>
+	</form>
+	<br><hr><br>
+	
 	
 	<!-- 
 		
@@ -168,6 +184,15 @@
 		- hidden 요소의 name과 value값이 서버로 전달된다.
 	 
 	 -->
+	 
+	<h3>hidden type</h3>
+	<form>
+		<p>이름 : <input type="text" name="name"></p>
+		<input type="hidden" name="deptCd" value="01">
+		<input type="hidden" name="locationCd" value="100"> 
+		<p><input type="submit"></p>
+	</form>
+	<br><hr><br>
 	
 	
 	<!-- 
@@ -181,7 +206,16 @@
 		- 익스플로어 및 특정 브라우저는 아직 지원이 되지 않는다.
 		
 	 -->
-
+	<h3>date type</h3>
+	<form>
+		<p>예약일1 : <input type="date" name="date1"></p>
+		<p>예약일2 : <input type="date" name="date2" value="2022-01-31"></p>
+		<p>예약일3 : <input type="date" name="date3" min="2022-09-19" max="2022-09-23"></p>
+		<p><input type="submit"></p>
+	</form>
+	<br><hr><br>
+	
+	
 	 
 	<!-- 
 	
@@ -197,7 +231,15 @@
 	 	min , max : 최소값, 최대값
 	 	
 	 -->
-			 
+	 
+	<h3>number type</h3>
+	<form>
+		<p>주문 개수 : <input type="number" name="orderQty"></p>
+		<p>신발 사이즈1 : <input type="number" value="260" step="5" name="size1"></p>
+		<p>신발 사이즈2 : <input type="number" value="260" step="10" min="200" max="300" name="size2"></p>
+		<p><input type="submit"></p>
+	</form>
+	<br><hr><br>		 
 	
 	<!-- 
 	 
@@ -206,8 +248,15 @@
 	    - 모습은 text타입과 비슷하지만 이메일에 유효한 주소를 검사한다. 
 	    - 유효값 확인은 submit을 클릭할 경우에 진행된다.
 	 	
-	  -->
-  
+	-->
+  	
+  	<h3>email type</h3>
+	<form>
+		<p>이메일 : <input type="email" name="email"></p>
+		<p><input type="submit"></p>
+	</form>
+	<br><hr><br>		
+  	
 
 </body>
 </html>
