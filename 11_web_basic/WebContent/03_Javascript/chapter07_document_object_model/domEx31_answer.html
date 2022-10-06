@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>연습예제</title>
+	<script>
+		function checkData() {
+			console.log("Name : " + document.f.name.value);
+			console.log("ID : " + document.f.id.value);
+			console.log("Password : " + document.f.pw.value);
+			console.log("Age : " + document.f.age.value);
+			console.log("Gender : " + document.f.gender.value);
+			var hobbies = document.f.hobbies;
+			for (var i = 0; i < hobbies.length; i++) {
+				if (hobbies[i].checked) {
+					console.log("Hobby : " +  hobbies[i].value);
+				}
+			}
+			console.log("Travel Destination : " + document.f.travel.value);
+			console.log("Memo : " + document.f.memo.value);
+			console.log("");
+		}
+	</script>
+</head>
+<body>
+
+	<!-- 확인버튼을 눌렀을때 폼 안의 데이터의 값들을 console.log에 출력하시오. -->
+
+	<form name="f">
+		<fieldset>
+			<legend>Account Registration Form</legend>
+			<p>Name : <input type="text" name="name"/></p>
+			<p>ID : <input type="text" name="id"/></p>
+			<p>PW : <input type="password" name="pwd"/></p>
+			<p>Age : <input type="text" name="age"/></p>
+			<p>
+				Gender : <input type="radio" name="gender" value="1"/>Male
+			   		   <input type="radio" name="gender" value="2"/>Female
+			</p>
+			<p>
+				Hobbies : <input type="checkbox" value="Exercise"/>Exercising
+					   <input type="checkbox" value="Sleeping"/>Sleeping
+					   <input type="checkbox" value="Studying"/>Studying
+			</p>
+			<p>Travel Destination
+				<select name="travel">
+					<option value="Guam">Guam</option>
+					<option value="다낭">다낭</option>
+					<option value="나트랑">나트랑</option>
+					<option value="코타키나발루">코타키나발루</option>
+					<option value="Taiwan">Taiwan</option>
+					<option value="푸꾸옥">푸꾸옥</option>
+				</select>
+			</p>
+			<p>Memo<br/>
+				<textarea rows="10" cols="50" name="memo"></textarea>
+			</p>
+			<p>
+				<input type="button" value="Verify" onclick="checkData()" />
+			</p>
+		</fieldset>
+	</form>
+</body>
+</html>
+
