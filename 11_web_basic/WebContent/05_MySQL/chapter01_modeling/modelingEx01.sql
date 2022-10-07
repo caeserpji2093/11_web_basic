@@ -111,6 +111,8 @@ CREATE TABLE T_MEMBER (
     EX) DESC TB_SHOPPING_GOODS;
     
 */ 
+DESC T_MEMBER;
+
 
 /*
 			
@@ -119,6 +121,10 @@ CREATE TABLE T_MEMBER (
 
 */
 
+DROP TABLE T_MEMBER;
+
+
+
 /*
 	
 	[ 데이터 베이스 삭제 형식 ]
@@ -126,6 +132,8 @@ CREATE TABLE T_MEMBER (
 		
 		EX) DROP DATABASE TEST_DB;
 */
+DROP DATABASE TEST_DB;
+
 
 
 /*	
