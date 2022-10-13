@@ -234,9 +234,25 @@ GROUP BY
         PRODUCT_CD;
 
 # 사용자별로 주문상품별로 2020년에 주문한 주문상품의 총수량을 조회하기
-
+SELECT
+		MEMBER_ID,
+        SUM(ORDER_GOODS_QTY)
+FROM
+		ORDER_TB
+WHERE
+		ORDER_DT BETWEEN '2020-01-01' AND '2020-12-31'
+GROUP BY
+		MEMBER_ID,
+        PRODUCT_CD;
 
 # 연도별로 총 주문건수 , 주문수량 조회하기.
-
+SELECT
+		ORDER_DT,
+        COUNT(ORDER_GOODS_QTY),
+        SUM(ORDER_GOODS_QTY)
+FROM
+		ORDER_TB
+GROUP BY
+		SUBSTRING(ORDER_DT, 1, 4);
 
 DROP TABLE ORDER_TB;
