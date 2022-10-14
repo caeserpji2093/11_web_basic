@@ -1,5 +1,5 @@
-CREATE DATABASE JOIN_TEST;
-USE JOIN_TEST;
+CREATE DATABASE SUBQUERY_TEST;
+USE SUBQUERY_TEST;
 
 
 CREATE TABLE MEMBER_TB(
@@ -12,8 +12,8 @@ CREATE TABLE MEMBER_TB(
 );
 
 CREATE TABLE PRODUCT_TB(
-    PRODUCT_CD 			VARCHAR(20),
-    PRODUCT_NM 			VARCHAR(100),
+    PRODUCT_CD 		VARCHAR(20),
+    PRODUCT_NM 		VARCHAR(100),
 	PRICE 			INT,
 	DELIVERY_PRICE 	INT
 );
@@ -71,151 +71,214 @@ INSERT INTO ORDER_TB VALUES('order18', 'user6' , 'product6' , 3 , '문 앞에 �
 INSERT INTO ORDER_TB VALUES('order19', 'user7' , 'product6' , 12 , '문 앞에 놓고 벨 눌러주세요.' , '배송완료' , '2020-11-11');
 INSERT INTO ORDER_TB VALUES('order20', 'user10' , 'product8' , 5 , '배송전 연락 주세요' , '배송중' , '2020-12-20');
 
+# 한번에 주문 수량이 10개 이상인 상품 정보 조회하기.
+              
 SELECT
 		*
 FROM
-		ORDER_TB O
-	  INNER JOIN MEMBER_TB M
-      ON O.MEMBER_ID = M.MEMBER_ID
-      INNER JOIN PRODUCT_TB P
-			ON O.PRODUCT_CD = P.PRODUCT_CD;
+		PRODUCT_TB 
+WHERE 
+		PRODUCT_CD IN (SELECT 
+								PRODUCT_CD
+						FROM
+								ORDER_TB 
+						WHERE 
+								ORDER_GOODS_QTY >= 10) ;     
 
-# 남자가 주문한 상품의 총 주문량을 조회하기
-SELECT
-		SUM(O.ORDER_GOODS_QTY) AS TOTAL_ORDER_GOODS_QTY
-FROM
-		ORDER_TB O
-        INNER JOIN MEMBER_TB M
-        ON O.MEMBER_ID = M.MEMBER_ID
-        AND M.SEX = 'm';
-			
-# 여자가 주문한 상품의 총 주문량을 조회하기
-SELECT
-		SUM(O.ORDER_GOODS_QTY) AS TOTAL_ORDER_GOODS_QTY
-FROM
-		ORDER_TB O
-        INNER JOIN MEMBER_TB M
-        ON O.MEMBER_ID = M.MEMBER_ID
-        AND M.SEX = 'f';
-	
-# 서울지역 주민이 주문한 상품의 총 주문량을 조회하기
-SELECT
-		SUM(O.ORDER_GOODS_QTY) AS TOTAL_ORDER_GOODS_QTY
-FROM
-		ORDER_TB O
-        INNER JOIN MEMBER_TB M
-        ON O.MEMBER_ID = M.MEMBER_ID
-        AND M.RESIDENCE = '서울';
 
-# 서울지역에 사는 여자가 주문한 상품의 총개수를 조회하기
+
+# 한번에 제일 많은 수량을 주문한 주문 코드 조회하기.
+
 SELECT
-		SUM(O.ORDER_GOODS_QTY) AS TOTAL_ORDER_GOODS_QTY
+		ORDER_CD
 FROM
-		ORDER_TB O
-        INNER JOIN MEMBER_TB M
-        ON O.MEMBER_ID = M.MEMBER_ID
-        AND M.RESIDENCE = '서울'
-        AND M.SEX = 'f';
-			
-# '서울' , '경기' , '인천' 지역에 사는 여자가 주문한 상품의 총 개수를 조회하기
+		ORDER_TB
+WHERE
+		ORDER_GOODS_QTY = (SELECT 
+									MAX(ORDER_GOODS_QTY) 
+						   FROM 
+									ORDER_TB);
+
+
+
+# 한번에 제일 많은 수량을 주문한 상품명 조회하기.
+
 SELECT
-		SUM(O.ORDER_GOODS_QTY) AS TOTAL_ORDER_GOODS_QTY
+		PRODUCT_NM
 FROM
-		ORDER_TB O
-	  INNER JOIN MEMBER_TB M
-              ON O.MEMBER_ID = M.MEMBER_ID
-			 AND M.RESIDENCE IN ('서울', '경기', '인천')
-			 AND M.SEX = 'f';
-			
-# 남자가 주문한 상품별로 상품의 이름을 조회하되, 주문량의 합이 적은 순서로 정렬하여 3개만 조회하기.
-SELECT
-		M.SEX	AS	SEX,
-        P.PRODUCT_CD AS PRODUCT_CD,
-		P.PRODUCT_NM			AS PRODUCT_NM,
-		SUM(O.ORDER_GOODS_QTY)  AS TOTAL_ORDER_GOODS_QTY
-FROM
-		ORDER_TB O
-        INNER JOIN MEMBER_TB M
-				ON O.MEMBER_ID = M.MEMBER_ID
-		INNER JOIN PRODUCT_TB P
-				ON P.PRODUCT_CD = O.PRODUCT_CD
-			   AND M.SEX = 'm'
-GROUP BY 
-		P.PRODUCT_CD
-ORDER BY
-		TOTAL_ORDER_GOODS_QTY
-LIMIT
-		3;
-        
-# 여자가 주문한 상품별로 상품의 이름을 조회하되, 주문량의 합이 많은 순서로 정렬하여 3개만 조회하기.
-SELECT
-		M.SEX AS SEX,
-        P.PRODUCT_CD AS PRODUCT_CD,
-        P.PRODUCT_NM AS PRODUCT_NM,
-        SUM(O.ORDER_GOODS_QTY) AS TOTAL_ORDER_GOODS_QTY
-FROM
-		   ORDER_TB O
-        INNER JOIN MEMBER_TB M
-				ON O.MEMBER_ID = M.MEMBER_ID
-		INNER JOIN PRODUCT_TB P
-				ON P.PRODUCT_CD = O.PRODUCT_CD
-			   AND M.SEX = 'f'
-GROUP BY 
-		P.PRODUCT_CD
-ORDER BY
-		TOTAL_ORDER_GOODS_QTY
-LIMIT
-		3;
+		PRODUCT_TB
+WHERE
+		PRODUCT_CD = (SELECT
+								PRODUCT_CD
+						FROM
+								ORDER_TB
+						WHERE
+								ORDER_GOODS_QTY = (SELECT 
+															MAX(ORDER_GOODS_QTY) 
+												   FROM 
+															ORDER_TB));        
 		
-# 2020년에 가장 많이 팔린 상품명 3개를 조회하기.
-
-			
-# 배송중인 상품의 주문량의 총합을 지역별로 조회하기
-
-
-# 'Apple 2020 맥북 에어 13'를 구매한 유저의 아이디와 이름을 조회하기
-
-
-# 1000000 ~ 2000000가격의 판매된 상품별로 상품의 코드 , 이름 , 총 판매량 조회하기
-
-		
-# 1000000 ~ 2000000가격의 판매된 상품별로 상품의 코드 , 이름 , 총 판매량을 조회하되 판매량이 5개 이상인 상품을 판매량이 높은순서 , 상품이름을 ㄱ~ㅎ 순서로 조회하기
-
-
-# 한번에 주문 수량이 10개 이상인 상품 정보 모두와 주문수량 조회하기.
-
-
-# 2020년 동안 판매된 매출총액 조회하기.(가격 * 개수 + 배송비)
-			
-
-# '상품별'로 2020년 동안 판매된 수량(내림차순)순으로 정렬하여 상품코드 , 상품이름 , 상품판매량 조회하기.
-
-
-# '지역별'로 판매량이 많은 순서대로 정렬하여 지역명과 판매량 조회하기.
-
-
-# 배송이 완료된 상품의 회원테이블의 모든 정보와 배송상태 조회하기.
-
-
-# '배송이 완료되지 않은 상품'별로  상품코드 , 상품 이름 , 배송이 완료되지 않은 주문 건수 조회하기.
-
-
-# '상품별'로 상품코드,상품이름,판매금액 총합을 판매급액이 많은 순으로 조회하기. 
-
-
-# '메르켈' 회원의 주문 상품 이름과 배송상태를 조회하기.
-
-
-# '메르켈' 회원의 주문금액 총합을 조회하기.
-
-
-#'사용자'별로 사용자 아이디 , 사용자 이름 , 주문금액 총합을 조회 하기.
-
-
-# '사용자'별로 주문금액 총합이 700만원 이상인 회원의 아이디 , 이름 , 주문금액을 조회하기.
-
-
-#'사용자'별로 주문금액 총합이 가장 많은 사람 3명의 이름과 총 주문 금액을 순서대로 조회하기.
-
         
-DROP DATABASE JOIN_TEST;
+        
+# 한번에 제일 많은 수량을 주문한 유저의 모든 정보 조회하기.
+
+SELECT
+		*
+FROM
+		MEMBER_TB
+WHERE
+		MEMBER_ID = (SELECT
+							MEMBER_ID
+					FROM
+							ORDER_TB
+					WHERE
+							ORDER_GOODS_QTY = (SELECT 
+														MAX(ORDER_GOODS_QTY) 
+												FROM 
+														ORDER_TB));       
+                            
+                                
+                                
+# 배송이 완료된 상품의 회원테이블의 모든 정보 조회하기.
+
+SELECT
+		*
+FROM
+		MEMBER_TB 
+WHERE
+		MEMBER_ID IN (SELECT 
+							MEMBER_ID 
+					  FROM 
+							ORDER_TB 
+					  WHERE 
+							DELIVERY_STATUS = '배송완료');
+
+
+
+# 배송이 완료되지 않은 상품의 상품명 조회하기.
+
+SELECT
+		PRODUCT_NM
+FROM
+		PRODUCT_TB 
+WHERE
+		PRODUCT_CD IN (SELECT 
+								PRODUCT_CD 
+						FROM 
+								ORDER_TB 
+						WHERE 
+								DELIVERY_STATUS <> '배송완료');
+
+
+# '메르켈' 회원이 주문한 상품 코드와 주문상품 명을 조회하기.
+
+SELECT
+		PRODUCT_CD,
+		PRODUCT_NM
+FROM 
+		PRODUCT_TB
+WHERE
+		PRODUCT_CD IN (SELECT
+								PRODUCT_CD
+						FROM 
+								ORDER_TB
+						WHERE 
+								MEMBER_ID = (SELECT
+													MEMBER_ID
+											FROM
+													MEMBER_TB
+											WHERE	
+													MEMBER_NM = "메르켈")) ;
+
+
+# '메르켈' 회원의 총 주문수량을 조회하기.
+
+SELECT
+		SUM(ORDER_GOODS_QTY)
+FROM
+		ORDER_TB
+WHERE 
+		MEMBER_ID = (SELECT
+							MEMBER_ID
+					FROM
+							MEMBER_TB
+					WHERE
+							MEMBER_NM = "메르켈");
+  
+  
+  
+# 서울지역의 모든 제품의 판매수량의 총합을 조회하기.
+
+SELECT
+		SUM(ORDER_GOODS_QTY)
+FROM
+		ORDER_TB
+WHERE
+		MEMBER_ID IN (SELECT
+								MEMBER_ID
+					  FROM
+								MEMBER_TB
+					  WHERE
+								RESIDENCE = '서울');
+
+
+
+# 삼성전자 2021 노트북 플러스2 15.6이 판매된 지역을 조회하기.
+
+SELECT DISTINCT
+		RESIDENCE
+FROM
+		MEMBER_TB
+WHERE
+		MEMBER_ID IN (SELECT
+							MEMBER_ID
+					FROM
+							ORDER_TB
+					WHERE 
+							PRODUCT_CD = (SELECT
+													PRODUCT_CD
+											FROM
+													PRODUCT_TB
+											WHERE
+													PRODUCT_NM = '삼성전자 2021 노트북 플러스2 15.6'));
+
+
+
+# 2020년 동안 판매된 상품의 양이 5개 미만인 상품 이름 조회하기.
+
+SELECT
+		PRODUCT_NM
+FROM
+		PRODUCT_TB
+WHERE
+		PRODUCT_CD IN (SELECT 
+								PRODUCT_CD
+						FROM 
+								ORDER_TB 
+						WHERE 
+								ORDER_DT BETWEEN '2020-01-01' AND '2020-12-31'
+						GROUP BY 
+								PRODUCT_CD 
+						HAVING
+								SUM(ORDER_GOODS_QTY) < 5);
+                                
+                                
+
+# user4가 주문한 주문보다 주문을 많이 한 회원의 아이디와 주문개수를 조회하기.
+
+SELECT
+		MEMBER_ID,
+		SUM(ORDER_GOODS_QTY) AS TOTAL_ORDER
+FROM
+		ORDER_TB
+GROUP BY
+		MEMBER_ID
+HAVING
+		TOTAL_ORDER > (SELECT 
+								SUM(ORDER_GOODS_QTY) 
+						FROM 
+								ORDER_TB 
+						WHERE 
+								MEMBER_ID = 'user4');
+								
+DROP DATABASE SUBQUERY_TEST;
