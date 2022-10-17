@@ -97,15 +97,57 @@ GROUP BY
         SEX;
 
 # 성별로 거주지역별로 회원 수를 조회하기
-
+SELECT
+		SEX,
+        RESIDENCE,
+        COUNT(*)
+FROM
+		MEMBER_TB
+GROUP BY
+		SEX,
+        RESIDENCE;
 
 # 국적별로 거주지역별로 성별로 회원 수를 조회하기
-
+SELECT
+		NATIONALITY,
+        RESIDENCE,
+        SEX,
+        COUNT(*)
+FROM
+		MEMBERS__TB
+GROUP BY
+		SEX,
+        RESIDENCE;
 
 # 도메인별로 회원 수를 조회하기(substr , locate 함수 사용)
-
+SELECT
+		substr(EMAIL, LOCATE('@', EMAIL) + 1) AS DOMAIN,
+        COUNT(*)
+FROM
+		MEMBER_TB
+GROUP BY
+		DOMAIN;
 
 # 서울을 제외한 지역별로 회원 수를 조회하기
-
+SELECT
+		RESIDENCE,
+        COUNT(*)
+FROM
+		MEMBER_TB
+WHERE
+		RESIDENCE <> '서울'
+GROUP BY
+		RESIDENCE;
 
 # '서울' , '경기' , '인천' 지역별로 회원 수를 조회하되 회원수가 3명이상일 경우만 조회하기.
+SELECT
+		RESIDENCE,
+        COUNT(*)
+FROM
+		MEMBER_TB
+WHERE
+		RESIDENCE IN ('서울', '경기', '인천')
+GROUP BY
+		RESIDENCE
+HAVING
+		COUNT(*) >= 3;
